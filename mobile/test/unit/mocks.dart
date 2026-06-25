@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:immich_mobile/constants/enums.dart';
+import 'package:immich_mobile/domain/models/asset_edit.model.dart';
 import 'package:immich_mobile/domain/models/user.model.dart';
 import 'package:mocktail/mocktail.dart' as mock;
 import 'package:mocktail/mocktail.dart';
@@ -15,6 +16,7 @@ class RepositoryMocks {
   final localAlbum = MockLocalAlbumRepository();
   final localAsset = MockDriftLocalAssetRepository();
   final trashedAsset = MockTrashedLocalAssetRepository();
+  final remoteAsset = MockRemoteAssetRepository();
 
   final nativeApi = MockNativeSyncApi();
 
@@ -28,12 +30,13 @@ class RepositoryMocks {
     reset(localAsset);
     reset(trashedAsset);
     reset(nativeApi);
+    reset(remoteAsset);
   }
 }
 
 class ServiceMocks {
-  final PartnerStub partner = PartnerStub(MockPartnerService());
-  final UserStub user = UserStub(MockUserService());
+  final partner = PartnerStub(MockPartnerService());
+  final user = UserStub(MockUserService());
   final asset = AssetStub(MockAssetService());
 
   ServiceMocks() {
@@ -69,6 +72,7 @@ class ServiceMocks {
 
   void _stubAssetService() {
     when(asset.updateFavorite).thenAnswer((_) async {});
+    when(asset.applyEdits).thenAnswer((_) async {});
   }
 }
 
@@ -76,10 +80,11 @@ void _registerFallbacks() {
   registerFallbackValue(LocalAlbumFactory.create());
   registerFallbackValue(LocalAssetFactory.create());
   registerFallbackValue(Uint8List(0));
+  registerFallbackValue(<AssetEdit>[]);
 }
 
-extension type const Stub<T extends Mock>(T mockedService) {
-  void reset() => mock.reset(mockedService);
+extension type const Stub<T extends Mock>(T mockedClass) {
+  void reset() => mock.reset(mockedClass);
 }
 
 extension type const PartnerStub(MockPartnerService service) implements Stub<MockPartnerService> {
@@ -130,4 +135,7 @@ extension type const UserStub(MockUserService service) implements Stub<MockUserS
 extension type const AssetStub(MockAssetService service) implements Stub<MockAssetService> {
   Future<void> Function() get updateFavorite =>
       () => service.updateFavorite(any(), any());
+
+  Future<void> Function() get applyEdits =>
+      () => service.applyEdits(any(), any());
 }

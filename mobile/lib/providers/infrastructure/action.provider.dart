@@ -135,16 +135,6 @@ class ActionNotifier extends Notifier<void> {
     };
   }
 
-  Future<ActionResult> troubleshoot(ActionSource source, BuildContext context) async {
-    final assets = _getAssets(source);
-    if (assets.length > 1) {
-      return ActionResult(count: assets.length, success: false, error: 'Cannot troubleshoot multiple assets');
-    }
-    unawaited(context.pushRoute(AssetTroubleshootRoute(asset: assets.first)));
-
-    return ActionResult(count: assets.length, success: true);
-  }
-
   Future<ActionResult> shareLink(ActionSource source, BuildContext context) async {
     final ids = _getRemoteIdsForSource(source);
     try {
@@ -629,37 +619,6 @@ class ActionNotifier extends Notifier<void> {
       Future.delayed(const Duration(seconds: 2), () {
         progressNotifier.clear();
       });
-    }
-  }
-
-  Future<ActionResult> applyEdits(ActionSource source, List<AssetEdit> edits) async {
-    final ids = _getOwnedRemoteIdsForSource(source);
-
-    if (ids.length != 1) {
-      _logger.warning('applyEdits called with multiple assets, expected single asset');
-      return ActionResult(count: ids.length, success: false, error: 'Expected single asset for applying edits');
-    }
-
-    Future<void> editReady;
-    if (ref.read(serverInfoProvider).serverVersion >= const SemVer(major: 3, minor: 0, patch: 0)) {
-      editReady = ref.read(websocketProvider.notifier).waitForEvent("AssetEditReadyV2", (dynamic data) {
-        final eventAsset = SyncAssetV2.fromJson(data["asset"]);
-        return eventAsset?.id == ids.first;
-      }, const Duration(seconds: 10));
-    } else {
-      editReady = ref.read(websocketProvider.notifier).waitForEvent("AssetEditReadyV1", (dynamic data) {
-        final eventAsset = SyncAssetV1.fromJson(data["asset"]);
-        return eventAsset?.id == ids.first;
-      }, const Duration(seconds: 10));
-    }
-
-    try {
-      await _service.applyEdits(ids.first, edits);
-      await editReady;
-      return const ActionResult(count: 1, success: true);
-    } catch (error, stack) {
-      _logger.severe('Failed to apply edits to assets', error, stack);
-      return ActionResult(count: ids.length, success: false, error: error.toString());
     }
   }
 }

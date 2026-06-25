@@ -305,14 +305,6 @@ class ActionService {
     return true;
   }
 
-  Future<void> applyEdits(String remoteId, List<AssetEdit> edits) async {
-    if (edits.isEmpty) {
-      await _assetApiRepository.removeEdits(remoteId);
-    } else {
-      await _assetApiRepository.editAsset(remoteId, edits);
-    }
-  }
-
   Future<int> _deleteLocalAssets(List<String> localIds) async {
     final deletedIds = await _assetMediaRepository.deleteAll(localIds);
     if (deletedIds.isEmpty) {
