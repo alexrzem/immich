@@ -28,7 +28,7 @@ while getopts 's:m:' flag; do
 done
 
 CURRENT_SERVER=$(jq -r '.version' package.json)
-if ! NEXT_SERVER=$(pnpm --silent pump "$CURRENT_SERVER" "$SERVER_PUMP"); then
+if ! NEXT_SERVER=$(pnpm --silent pump "$SERVER_PUMP"); then
   echo "Fatal: failed to pump server version: $NEXT_SERVER" >&2
   exit 1
 fi
@@ -45,25 +45,21 @@ else
   exit 1
 fi
 
+echo "Pumping Server: $CURRENT_SERVER => $NEXT_SERVER"
 
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix server
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix packages/cli
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix web
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix e2e
+pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix packages/sdk
 
-if [ "$CURRENT_SERVER" != "$NEXT_SERVER" ]; then
-  echo "Pumping Server: $CURRENT_SERVER => $NEXT_SERVER"
+# copy version to open-api spec
+mise run //:open-api
 
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix server
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix packages/cli
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix web
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix e2e
-  pnpm version "$NEXT_SERVER" --no-git-tag-version --no-git-checks --prefix packages/sdk
+uv version --directory machine-learning "$NEXT_SERVER"
 
-  # copy version to open-api spec
-  mise run //:open-api
-
-  uv version --directory machine-learning "$NEXT_SERVER"
-
-  ./misc/release/archive-version.js "$NEXT_SERVER"
-fi
+./misc/release/archive-version.js "$NEXT_SERVER"
 
 if [ "$CURRENT_MOBILE" != "$NEXT_MOBILE" ]; then
   echo "Pumping Mobile: $CURRENT_MOBILE => $NEXT_MOBILE"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { pump } from './pump';
+import { getNextVersion, PumpInvalidError, PumpUsageError } from './pump';
 
-describe(pump.name, () => {
+describe(getNextVersion.name, () => {
   describe('usage', () => {
     it.each([
       [],
@@ -10,10 +10,7 @@ describe(pump.name, () => {
       ['invalid', 'patch'],
       ['2.7.5', 'major'],
     ])('should not accept $0, $1 as inputs', (version, type) => {
-      expect(pump(version, type)).toEqual({
-        message: expect.stringContaining('Usage: '),
-        exitCode: 1,
-      });
+      expect(() => getNextVersion(version, type)).toThrow(PumpUsageError);
     });
   });
 
@@ -58,10 +55,7 @@ describe(pump.name, () => {
         it.each(group.items)(
           'should allow a $0 from $1 to $2',
           (type, version, next) => {
-            expect(pump(version, type)).toEqual({
-              message: next,
-              exitCode: 0,
-            });
+            expect(getNextVersion(version, type)).toEqual(next);
           },
         );
       });
@@ -77,10 +71,7 @@ describe(pump.name, () => {
         ['prerelease', 'v3.0.0'],
         ['release', 'v3.0.0'],
       ])('should not allow a $0 on $1', (type, version) => {
-        expect(pump(version, type)).toEqual({
-          message: expect.stringContaining('Invalid pump'),
-          exitCode: 1,
-        });
+        expect(() => getNextVersion(version, type)).toThrow(PumpInvalidError);
       });
     });
   });
