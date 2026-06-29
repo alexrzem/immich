@@ -90,6 +90,18 @@ export type Tag = {
   parentId: string | null;
 };
 
+export type Collection = {
+  id: string;
+  ownerId: string;
+  parentId: string | null;
+  name: string;
+  description: string;
+  thumbnailAssetId: string | null;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Memory = {
   id: string;
   createdAt: Date;
@@ -359,6 +371,17 @@ export const columns = {
     'quotaUsageInBytes',
   ],
   tag: ['tag.id', 'tag.value', 'tag.createdAt', 'tag.updatedAt', 'tag.color', 'tag.parentId'],
+  collection: [
+    'collection.id',
+    'collection.ownerId',
+    'collection.parentId',
+    'collection.name',
+    'collection.description',
+    'collection.thumbnailAssetId',
+    'collection.order',
+    'collection.createdAt',
+    'collection.updatedAt',
+  ],
   apiKey: ['id', 'name', 'userId', 'createdAt', 'updatedAt', 'permissions'],
   notification: ['id', 'createdAt', 'level', 'type', 'title', 'description', 'data', 'readAt'],
   pluginMethod: [

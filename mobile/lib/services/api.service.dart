@@ -19,6 +19,7 @@ class ApiService {
   late AuthenticationApi authenticationApi;
   late AuthenticationApi oAuthApi;
   late AlbumsApi albumsApi;
+  late CollectionsApi collectionsApi;
   late AssetsApi assetsApi;
   late SearchApi searchApi;
   late ServerApi serverInfoApi;
@@ -60,6 +61,7 @@ class ApiService {
     authenticationApi = AuthenticationApi(_apiClient);
     oAuthApi = AuthenticationApi(_apiClient);
     albumsApi = AlbumsApi(_apiClient);
+    collectionsApi = CollectionsApi(_apiClient);
     assetsApi = AssetsApi(_apiClient);
     serverInfoApi = ServerApi(_apiClient);
     searchApi = SearchApi(_apiClient);

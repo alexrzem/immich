@@ -1,11 +1,12 @@
 <script lang="ts">
   import BottomInfo from '$lib/components/shared-components/side-bar/BottomInfo.svelte';
   import RecentAlbums from '$lib/components/shared-components/side-bar/RecentAlbums.svelte';
+  import RecentCollections from '$lib/components/shared-components/side-bar/RecentCollections.svelte';
   import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
   import { authManager } from '$lib/managers/auth-manager.svelte';
   import { featureFlagsManager } from '$lib/managers/feature-flags-manager.svelte';
   import { Route } from '$lib/route';
-  import { recentAlbumsDropdown } from '$lib/stores/preferences.store';
+  import { recentAlbumsDropdown, recentCollectionsDropdown } from '$lib/stores/preferences.store';
   import { NavbarGroup, NavbarItem } from '@immich/ui';
   import {
     mdiAccount,
@@ -14,6 +15,8 @@
     mdiAccountOutline,
     mdiArchiveArrowDown,
     mdiArchiveArrowDownOutline,
+    mdiFolderMultiple,
+    mdiFolderMultipleOutline,
     mdiFolderOutline,
     mdiHeart,
     mdiHeartOutline,
@@ -76,6 +79,20 @@
     {#snippet items()}
       <span in:fly={{ y: -20 }} class="hidden md:block">
         <RecentAlbums />
+      </span>
+    {/snippet}
+  </NavbarItem>
+
+  <NavbarItem
+    title={$t('collections')}
+    href={Route.collections()}
+    icon={mdiFolderMultipleOutline}
+    activeIcon={mdiFolderMultiple}
+    bind:expanded={$recentCollectionsDropdown}
+  >
+    {#snippet items()}
+      <span in:fly={{ y: -20 }} class="hidden md:block">
+        <RecentCollections />
       </span>
     {/snippet}
   </NavbarItem>

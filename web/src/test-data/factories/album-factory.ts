@@ -6,6 +6,7 @@ export const albumFactory = Sync.makeFactory<AlbumResponseDto>({
   albumName: Sync.each(() => faker.commerce.product()),
   description: '',
   albumThumbnailAssetId: null,
+  collectionId: null,
   assetCount: Sync.each((index) => index % 5),
   createdAt: Sync.each(() => faker.date.past().toISOString()),
   updatedAt: Sync.each(() => faker.date.past().toISOString()),

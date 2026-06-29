@@ -13,6 +13,7 @@ part of openapi.api;
 class SyncAlbumV2 {
   /// Returns a new [SyncAlbumV2] instance.
   SyncAlbumV2({
+    required this.collectionId,
     required this.createdAt,
     required this.description,
     required this.id,
@@ -22,6 +23,9 @@ class SyncAlbumV2 {
     required this.thumbnailAssetId,
     required this.updatedAt,
   });
+
+  /// Collection the album belongs to, if any
+  String? collectionId;
 
   /// Created at
   DateTime createdAt;
@@ -48,6 +52,7 @@ class SyncAlbumV2 {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is SyncAlbumV2 &&
+    other.collectionId == collectionId &&
     other.createdAt == createdAt &&
     other.description == description &&
     other.id == id &&
@@ -60,6 +65,7 @@ class SyncAlbumV2 {
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (collectionId == null ? 0 : collectionId!.hashCode) +
     (createdAt.hashCode) +
     (description.hashCode) +
     (id.hashCode) +
@@ -70,10 +76,15 @@ class SyncAlbumV2 {
     (updatedAt.hashCode);
 
   @override
-  String toString() => 'SyncAlbumV2[createdAt=$createdAt, description=$description, id=$id, isActivityEnabled=$isActivityEnabled, name=$name, order=$order, thumbnailAssetId=$thumbnailAssetId, updatedAt=$updatedAt]';
+  String toString() => 'SyncAlbumV2[collectionId=$collectionId, createdAt=$createdAt, description=$description, id=$id, isActivityEnabled=$isActivityEnabled, name=$name, order=$order, thumbnailAssetId=$thumbnailAssetId, updatedAt=$updatedAt]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.collectionId != null) {
+      json[r'collectionId'] = this.collectionId;
+    } else {
+      json[r'collectionId'] = null;
+    }
       json[r'createdAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/')
         ? this.createdAt.millisecondsSinceEpoch
         : this.createdAt.toUtc().toIso8601String();
@@ -102,6 +113,7 @@ class SyncAlbumV2 {
       final json = value.cast<String, dynamic>();
 
       return SyncAlbumV2(
+        collectionId: mapValueOfType<String>(json, r'collectionId'),
         createdAt: mapDateTime(json, r'createdAt', r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/')!,
         description: mapValueOfType<String>(json, r'description')!,
         id: mapValueOfType<String>(json, r'id')!,
@@ -157,6 +169,7 @@ class SyncAlbumV2 {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'collectionId',
     'createdAt',
     'description',
     'id',

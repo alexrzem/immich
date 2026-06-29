@@ -46,7 +46,10 @@ import 'package:immich_mobile/presentation/pages/drift_album_options.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_archive.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_asset_selection_timeline.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_asset_troubleshoot.page.dart';
+import 'package:immich_mobile/presentation/pages/drift_collection.page.dart';
+import 'package:immich_mobile/presentation/pages/drift_collections.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_create_album.page.dart';
+import 'package:immich_mobile/presentation/pages/drift_create_collection.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_favorite.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_library.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_local_album.page.dart';
@@ -127,6 +130,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: DriftSearchRoute.page, guards: [_authGuard, _duplicateGuard], maintainState: false),
         AutoRoute(page: DriftLibraryRoute.page, guards: [_authGuard, _duplicateGuard]),
         AutoRoute(page: DriftAlbumsRoute.page, guards: [_authGuard, _duplicateGuard]),
+        AutoRoute(page: DriftCollectionsRoute.page, guards: [_authGuard, _duplicateGuard]),
       ],
     ),
     AutoRoute(page: ProfilePictureCropRoute.page),
@@ -175,6 +179,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: DriftRecentlyAddedRoute.page, guards: [_authGuard, _duplicateGuard]),
     AutoRoute(page: DriftLocalAlbumsRoute.page, guards: [_authGuard, _duplicateGuard]),
     AutoRoute(page: DriftCreateAlbumRoute.page, guards: [_authGuard, _duplicateGuard]),
+    AutoRoute(page: DriftCollectionRoute.page, guards: [_authGuard, _duplicateGuard]),
+    AutoRoute(page: DriftCreateCollectionRoute.page, guards: [_authGuard, _duplicateGuard]),
     AutoRoute(page: DriftPlaceRoute.page, guards: [_authGuard, _duplicateGuard]),
     AutoRoute(page: DriftPlaceDetailRoute.page, guards: [_authGuard, _duplicateGuard]),
     AutoRoute(page: DriftUserSelectionRoute.page, guards: [_authGuard, _duplicateGuard]),

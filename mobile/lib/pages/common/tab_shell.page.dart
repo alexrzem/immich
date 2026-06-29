@@ -11,6 +11,7 @@ import 'package:immich_mobile/extensions/build_context_extensions.dart';
 import 'package:immich_mobile/presentation/pages/search/paginated_search.provider.dart';
 import 'package:immich_mobile/providers/haptic_feedback.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/album.provider.dart';
+import 'package:immich_mobile/providers/infrastructure/collection.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/memory.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/people.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/readonly_mode.provider.dart';
@@ -56,6 +57,12 @@ class _TabShellPageState extends ConsumerState<TabShellPage> {
         selectedIcon: Icon(Icons.space_dashboard_rounded, color: context.primaryColor),
         enabled: !isReadonlyModeEnabled,
       ),
+      NavigationDestination(
+        label: 'Collections',
+        icon: const Icon(Icons.collections_bookmark_outlined),
+        selectedIcon: Icon(Icons.collections_bookmark, color: context.primaryColor),
+        enabled: !isReadonlyModeEnabled,
+      ),
     ];
 
     Widget navigationRail(TabsRouter tabsRouter) {
@@ -78,7 +85,13 @@ class _TabShellPageState extends ConsumerState<TabShellPage> {
     }
 
     return AutoTabsRouter(
-      routes: const [MainTimelineRoute(), DriftSearchRoute(), DriftAlbumsRoute(), DriftLibraryRoute()],
+      routes: const [
+        MainTimelineRoute(),
+        DriftSearchRoute(),
+        DriftAlbumsRoute(),
+        DriftLibraryRoute(),
+        DriftCollectionsRoute(),
+      ],
       duration: const Duration(milliseconds: 600),
       transitionBuilder: (context, child, animation) => FadeTransition(opacity: animation, child: child),
       builder: (context, child) {
@@ -133,6 +146,11 @@ void _onNavigationSelected(TabsRouter router, int index, WidgetRef ref) {
   if (index == kLibraryTabIndex) {
     ref.invalidate(localAlbumProvider);
     ref.invalidate(driftGetAllPeopleProvider);
+  }
+
+  // Collections page
+  if (index == kCollectionsTabIndex) {
+    ref.read(remoteCollectionProvider.notifier).refresh();
   }
 
   ref.read(hapticFeedbackProvider.notifier).selectionClick();

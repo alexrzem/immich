@@ -1,5 +1,6 @@
 import type {
   AlbumResponseDto,
+  CollectionResponseDto,
   ServerAboutResponseDto,
   ServerStorageResponseDto,
   ServerVersionHistoryResponseDto,
@@ -8,6 +9,7 @@ import { eventManager } from '$lib/managers/event-manager.svelte';
 
 interface UserInteractions {
   recentAlbums?: AlbumResponseDto[];
+  recentCollections?: CollectionResponseDto[];
   versions?: ServerVersionHistoryResponseDto[];
   aboutInfo?: ServerAboutResponseDto;
   serverInfo?: ServerStorageResponseDto;
@@ -15,6 +17,7 @@ interface UserInteractions {
 
 const defaultUserInteraction: UserInteractions = {
   recentAlbums: undefined,
+  recentCollections: undefined,
   versions: undefined,
   aboutInfo: undefined,
   serverInfo: undefined,
@@ -26,6 +29,10 @@ const resetRecentAlbums = () => {
   userInteraction.recentAlbums = undefined;
 };
 
+const resetRecentCollections = () => {
+  userInteraction.recentCollections = undefined;
+};
+
 const reset = () => {
   Object.assign(userInteraction, defaultUserInteraction);
 };
@@ -34,5 +41,9 @@ eventManager.on({
   AlbumCreate: () => resetRecentAlbums(),
   AlbumUpdate: () => resetRecentAlbums(),
   AlbumDelete: () => resetRecentAlbums(),
+  CollectionCreate: () => resetRecentCollections(),
+  CollectionUpdate: () => resetRecentCollections(),
+  CollectionDelete: () => resetRecentCollections(),
+  CollectionAlbumsChange: () => resetRecentCollections(),
   AuthLogout: () => reset(),
 });

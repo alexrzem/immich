@@ -514,12 +514,33 @@ class WorkflowAccess {
   }
 }
 
+class CollectionAccess {
+  constructor(private db: Kysely<DB>) {}
+
+  @GenerateSql({ params: [DummyValue.UUID, DummyValue.UUID_SET] })
+  @ChunkedSet({ paramIndex: 1 })
+  async checkOwnerAccess(userId: string, collectionIds: Set<string>) {
+    if (collectionIds.size === 0) {
+      return new Set<string>();
+    }
+
+    return this.db
+      .selectFrom('collection')
+      .select('collection.id')
+      .where('collection.id', 'in', [...collectionIds])
+      .where('collection.ownerId', '=', userId)
+      .execute()
+      .then((collections) => new Set(collections.map((collection) => collection.id)));
+  }
+}
+
 @Injectable()
 export class AccessRepository {
   activity: ActivityAccess;
   album: AlbumAccess;
   asset: AssetAccess;
   authDevice: AuthDeviceAccess;
+  collection: CollectionAccess;
   duplicate: DuplicateAccess;
   memory: MemoryAccess;
   notification: NotificationAccess;
@@ -536,6 +557,7 @@ export class AccessRepository {
     this.album = new AlbumAccess(db);
     this.asset = new AssetAccess(db);
     this.authDevice = new AuthDeviceAccess(db);
+    this.collection = new CollectionAccess(db);
     this.duplicate = new DuplicateAccess(db);
     this.memory = new MemoryAccess(db);
     this.notification = new NotificationAccess(db);

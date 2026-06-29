@@ -44,6 +44,7 @@
   } from '$lib/services/album.service';
   import { getGlobalActions } from '$lib/services/app.service';
   import { getAssetBulkActions } from '$lib/services/asset.service';
+  import { handleAddAlbumToCollection, handleRemoveAlbumFromCollection } from '$lib/services/collection.service';
   import { SlideshowNavigation, SlideshowState, slideshowStore } from '$lib/stores/slideshow.store';
   import { handlePromiseError } from '$lib/utils';
   import { handleError } from '$lib/utils/handle-error';
@@ -66,6 +67,8 @@
     mdiDotsHorizontal,
     mdiDotsVertical,
     mdiDownload,
+    mdiFolderMultiplePlusOutline,
+    mdiFolderRemoveOutline,
     mdiImageOutline,
     mdiImagePlusOutline,
     mdiLink,
@@ -575,6 +578,25 @@
                 {/if}
 
                 {#if isOwned}
+                  <MenuOption
+                    icon={mdiFolderMultiplePlusOutline}
+                    text={$t('add_to_collection')}
+                    onClick={async () => {
+                      await handleAddAlbumToCollection(album);
+                      await refreshAlbum();
+                    }}
+                  />
+                  {#if album.collectionId}
+                    {@const collectionId = album.collectionId}
+                    <MenuOption
+                      icon={mdiFolderRemoveOutline}
+                      text={$t('remove_from_collection')}
+                      onClick={async () => {
+                        await handleRemoveAlbumFromCollection(collectionId, album);
+                        await refreshAlbum();
+                      }}
+                    />
+                  {/if}
                   <MenuOption
                     icon={mdiDeleteOutline}
                     text={$t('delete_album')}

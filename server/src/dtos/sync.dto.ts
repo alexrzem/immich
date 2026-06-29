@@ -241,6 +241,7 @@ const SyncAlbumV2Schema = z
     thumbnailAssetId: z.string().nullable().describe('Thumbnail asset ID'),
     isActivityEnabled: z.boolean().describe('Is activity enabled'),
     order: AssetOrderSchema,
+    collectionId: z.string().nullable().describe('Collection the album belongs to, if any'),
   })
   .meta({ id: 'SyncAlbumV2' });
 
@@ -279,7 +280,9 @@ export function syncAlbumV2ToV1(
 ): SyncAlbumV1 {
   const owner = albumUsers.find(({ role }) => role === AlbumUserRole.Owner)!;
 
-  return { ...albumV2, ownerId: owner.userId };
+  // collectionId is a V2-only field; V1 clients don't understand collections.
+  const { collectionId: _collectionId, ...rest } = albumV2;
+  return { ...rest, ownerId: owner.userId };
 }
 
 const SyncMemoryV1Schema = z

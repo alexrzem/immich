@@ -504,6 +504,8 @@ export type AlbumResponseDto = {
     albumUsers: AlbumUserResponseDto[];
     /** Number of assets */
     assetCount: number;
+    /** Collection the album belongs to, if any */
+    collectionId: string | null;
     contributorCounts?: ContributorCountResponseDto[];
     /** Creation date */
     createdAt: string;
@@ -1112,6 +1114,54 @@ export type AuthStatusResponseDto = {
 export type ValidateAccessTokenResponseDto = {
     /** Authentication status */
     authStatus: boolean;
+};
+export type CollectionResponseDto = {
+    /** Number of albums directly in this collection */
+    albumCount: number;
+    /** IDs of albums directly in this collection */
+    albumIds: string[];
+    /** Number of direct sub-collections */
+    childCount: number;
+    /** Creation date */
+    createdAt: string;
+    /** Collection description */
+    description: string;
+    /** Collection ID */
+    id: string;
+    /** Collection name */
+    name: string;
+    /** Manual sort position within the parent */
+    order: number;
+    /** Owner ID */
+    ownerId: string;
+    /** Parent collection ID */
+    parentId: string | null;
+    /** Thumbnail asset ID */
+    thumbnailAssetId: string | null;
+    /** Last update date */
+    updatedAt: string;
+};
+export type CreateCollectionDto = {
+    /** Collection description */
+    description?: string;
+    /** Collection name */
+    name: string;
+    /** Manual sort position within the parent */
+    order?: number;
+    /** Parent collection ID (omit or null for a root collection) */
+    parentId?: string | null;
+};
+export type UpdateCollectionDto = {
+    /** Collection description */
+    description?: string;
+    /** Collection name */
+    name?: string;
+    /** Manual sort position within the parent */
+    order?: number;
+    /** New parent collection ID. Pass null to move to the root, omit to leave unchanged. */
+    parentId?: string | null;
+    /** Collection thumbnail asset ID */
+    thumbnailAssetId?: string | null;
 };
 export type DownloadArchiveDto = {
     /** Asset IDs */
@@ -2905,6 +2955,8 @@ export type SyncAlbumV1 = {
     updatedAt: string;
 };
 export type SyncAlbumV2 = {
+    /** Collection the album belongs to, if any */
+    collectionId: string | null;
     /** Created at */
     createdAt: string;
     /** Album description */
@@ -4644,6 +4696,108 @@ export function validateAccessToken(opts?: Oazapfts.RequestOpts) {
         ...opts,
         method: "POST"
     }));
+}
+/**
+ * List collections
+ */
+export function getAllCollections({ parentId }: {
+    parentId?: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: CollectionResponseDto[];
+    }>(`/collections${QS.query(QS.explode({
+        parentId
+    }))}`, {
+        ...opts
+    }));
+}
+/**
+ * Create a collection
+ */
+export function createCollection({ createCollectionDto }: {
+    createCollectionDto: CreateCollectionDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 201;
+        data: CollectionResponseDto;
+    }>("/collections", oazapfts.json({
+        ...opts,
+        method: "POST",
+        body: createCollectionDto
+    })));
+}
+/**
+ * Delete a collection
+ */
+export function deleteCollection({ id }: {
+    id: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchText(`/collections/${encodeURIComponent(id)}`, {
+        ...opts,
+        method: "DELETE"
+    }));
+}
+/**
+ * Retrieve a collection
+ */
+export function getCollection({ id }: {
+    id: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: CollectionResponseDto;
+    }>(`/collections/${encodeURIComponent(id)}`, {
+        ...opts
+    }));
+}
+/**
+ * Update a collection
+ */
+export function updateCollection({ id, updateCollectionDto }: {
+    id: string;
+    updateCollectionDto: UpdateCollectionDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: CollectionResponseDto;
+    }>(`/collections/${encodeURIComponent(id)}`, oazapfts.json({
+        ...opts,
+        method: "PATCH",
+        body: updateCollectionDto
+    })));
+}
+/**
+ * Remove albums from a collection
+ */
+export function removeAlbumsFromCollection({ id, bulkIdsDto }: {
+    id: string;
+    bulkIdsDto: BulkIdsDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: BulkIdResponseDto[];
+    }>(`/collections/${encodeURIComponent(id)}/albums`, oazapfts.json({
+        ...opts,
+        method: "DELETE",
+        body: bulkIdsDto
+    })));
+}
+/**
+ * Add albums to a collection
+ */
+export function addAlbumsToCollection({ id, bulkIdsDto }: {
+    id: string;
+    bulkIdsDto: BulkIdsDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: BulkIdResponseDto[];
+    }>(`/collections/${encodeURIComponent(id)}/albums`, oazapfts.json({
+        ...opts,
+        method: "PUT",
+        body: bulkIdsDto
+    })));
 }
 /**
  * Download asset archive
@@ -7187,6 +7341,10 @@ export enum Permission {
     AlbumUserCreate = "albumUser.create",
     AlbumUserUpdate = "albumUser.update",
     AlbumUserDelete = "albumUser.delete",
+    CollectionCreate = "collection.create",
+    CollectionRead = "collection.read",
+    CollectionUpdate = "collection.update",
+    CollectionDelete = "collection.delete",
     AuthChangePassword = "auth.changePassword",
     AuthDeviceDelete = "authDevice.delete",
     ArchiveRead = "archive.read",

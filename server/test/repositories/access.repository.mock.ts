@@ -29,6 +29,10 @@ export const newAccessRepositoryMock = (): IAccessRepositoryMock => {
       checkSharedLinkAccess: vitest.fn().mockResolvedValue(new Set()),
     },
 
+    collection: {
+      checkOwnerAccess: vitest.fn().mockResolvedValue(new Set()),
+    },
+
     authDevice: {
       checkOwnerAccess: vitest.fn().mockResolvedValue(new Set()),
     },

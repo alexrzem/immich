@@ -149,6 +149,11 @@ export enum Permission {
   AlbumUserUpdate = 'albumUser.update',
   AlbumUserDelete = 'albumUser.delete',
 
+  CollectionCreate = 'collection.create',
+  CollectionRead = 'collection.read',
+  CollectionUpdate = 'collection.update',
+  CollectionDelete = 'collection.delete',
+
   AuthChangePassword = 'auth.changePassword',
 
   AuthDeviceDelete = 'authDevice.delete',
@@ -1160,6 +1165,7 @@ export enum ApiTag {
   Activities = 'Activities',
   Albums = 'Albums',
   ApiKeys = 'API keys',
+  Collections = 'Collections',
   Authentication = 'Authentication',
   AuthenticationAdmin = 'Authentication (admin)',
   Assets = 'Assets',

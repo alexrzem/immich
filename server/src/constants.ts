@@ -147,6 +147,8 @@ export const endpointTags: Record<ApiTag, string> = {
   [ApiTag.Activities]: 'An activity is a like or a comment made by a user on an asset or album.',
   [ApiTag.Albums]: 'An album is a collection of assets that can be shared with other users or via shared links.',
   [ApiTag.ApiKeys]: 'An api key can be used to programmatically access the Immich API.',
+  [ApiTag.Collections]:
+    'A collection is a user-owned, hierarchical container used to organize albums and nested sub-collections.',
   [ApiTag.Assets]: 'An asset is an image or video that has been uploaded to Immich.',
   [ApiTag.Authentication]: 'Endpoints related to user authentication, including OAuth.',
   [ApiTag.AuthenticationAdmin]: 'Administrative endpoints related to authentication.',

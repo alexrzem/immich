@@ -26,6 +26,7 @@ export class AlbumFactory {
       id: newUuid(),
       albumName: 'My Album',
       albumThumbnailAssetId: null,
+      collectionId: null,
       createdAt: newDate(),
       deletedAt: null,
       description: 'Album description',

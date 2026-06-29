@@ -140,6 +140,13 @@ Class | Method | HTTP request | Description
 *AuthenticationApi* | [**unlockAuthSession**](doc//AuthenticationApi.md#unlockauthsession) | **POST** /auth/session/unlock | Unlock auth session
 *AuthenticationApi* | [**validateAccessToken**](doc//AuthenticationApi.md#validateaccesstoken) | **POST** /auth/validateToken | Validate access token
 *AuthenticationAdminApi* | [**unlinkAllOAuthAccountsAdmin**](doc//AuthenticationAdminApi.md#unlinkalloauthaccountsadmin) | **POST** /admin/auth/unlink-all | Unlink all OAuth accounts
+*CollectionsApi* | [**addAlbumsToCollection**](doc//CollectionsApi.md#addalbumstocollection) | **PUT** /collections/{id}/albums | Add albums to a collection
+*CollectionsApi* | [**createCollection**](doc//CollectionsApi.md#createcollection) | **POST** /collections | Create a collection
+*CollectionsApi* | [**deleteCollection**](doc//CollectionsApi.md#deletecollection) | **DELETE** /collections/{id} | Delete a collection
+*CollectionsApi* | [**getAllCollections**](doc//CollectionsApi.md#getallcollections) | **GET** /collections | List collections
+*CollectionsApi* | [**getCollection**](doc//CollectionsApi.md#getcollection) | **GET** /collections/{id} | Retrieve a collection
+*CollectionsApi* | [**removeAlbumsFromCollection**](doc//CollectionsApi.md#removealbumsfromcollection) | **DELETE** /collections/{id}/albums | Remove albums from a collection
+*CollectionsApi* | [**updateCollection**](doc//CollectionsApi.md#updatecollection) | **PATCH** /collections/{id} | Update a collection
 *DatabaseBackupsAdminApi* | [**deleteDatabaseBackup**](doc//DatabaseBackupsAdminApi.md#deletedatabasebackup) | **DELETE** /admin/database-backups | Delete database backup
 *DatabaseBackupsAdminApi* | [**downloadDatabaseBackup**](doc//DatabaseBackupsAdminApi.md#downloaddatabasebackup) | **GET** /admin/database-backups/{filename} | Download database backup
 *DatabaseBackupsAdminApi* | [**listDatabaseBackups**](doc//DatabaseBackupsAdminApi.md#listdatabasebackups) | **GET** /admin/database-backups | List database backups
@@ -425,9 +432,11 @@ Class | Method | HTTP request | Description
  - [CastResponse](doc//CastResponse.md)
  - [CastUpdate](doc//CastUpdate.md)
  - [ChangePasswordDto](doc//ChangePasswordDto.md)
+ - [CollectionResponseDto](doc//CollectionResponseDto.md)
  - [Colorspace](doc//Colorspace.md)
  - [ContributorCountResponseDto](doc//ContributorCountResponseDto.md)
  - [CreateAlbumDto](doc//CreateAlbumDto.md)
+ - [CreateCollectionDto](doc//CreateCollectionDto.md)
  - [CreateLibraryDto](doc//CreateLibraryDto.md)
  - [CreateProfileImageResponseDto](doc//CreateProfileImageResponseDto.md)
  - [CropParameters](doc//CropParameters.md)
@@ -688,6 +697,7 @@ Class | Method | HTTP request | Description
  - [UpdateAlbumDto](doc//UpdateAlbumDto.md)
  - [UpdateAlbumUserDto](doc//UpdateAlbumUserDto.md)
  - [UpdateAssetDto](doc//UpdateAssetDto.md)
+ - [UpdateCollectionDto](doc//UpdateCollectionDto.md)
  - [UpdateLibraryDto](doc//UpdateLibraryDto.md)
  - [UsageByUserDto](doc//UsageByUserDto.md)
  - [UserAdminCreateDto](doc//UserAdminCreateDto.md)

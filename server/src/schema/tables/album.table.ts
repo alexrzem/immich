@@ -12,12 +12,21 @@ import {
 import { UpdatedAtTrigger, UpdateIdColumn } from 'src/decorators';
 import { AssetOrder } from 'src/enum';
 import { AssetTable } from 'src/schema/tables/asset.table';
+import { CollectionTable } from 'src/schema/tables/collection.table';
 
 @Table({ name: 'album' })
 @UpdatedAtTrigger('album_updatedAt')
 export class AlbumTable {
   @PrimaryGeneratedColumn()
   id!: Generated<string>;
+
+  @ForeignKeyColumn(() => CollectionTable, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+    comment: 'Collection the album belongs to, if any',
+  })
+  collectionId!: string | null;
 
   @Column({ default: 'Untitled Album' })
   albumName!: Generated<string>;

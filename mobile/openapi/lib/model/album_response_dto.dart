@@ -17,6 +17,7 @@ class AlbumResponseDto {
     required this.albumThumbnailAssetId,
     this.albumUsers = const [],
     required this.assetCount,
+    required this.collectionId,
     this.contributorCounts = const Optional.present(const []),
     required this.createdAt,
     required this.description,
@@ -45,6 +46,9 @@ class AlbumResponseDto {
   /// Minimum value: 0
   /// Maximum value: 9007199254740991
   int assetCount;
+
+  /// Collection the album belongs to, if any
+  String? collectionId;
 
   Optional<List<ContributorCountResponseDto>?> contributorCounts;
 
@@ -110,6 +114,7 @@ class AlbumResponseDto {
     other.albumThumbnailAssetId == albumThumbnailAssetId &&
     _deepEquality.equals(other.albumUsers, albumUsers) &&
     other.assetCount == assetCount &&
+    other.collectionId == collectionId &&
     _deepEquality.equals(other.contributorCounts, contributorCounts) &&
     other.createdAt == createdAt &&
     other.description == description &&
@@ -130,6 +135,7 @@ class AlbumResponseDto {
     (albumThumbnailAssetId == null ? 0 : albumThumbnailAssetId!.hashCode) +
     (albumUsers.hashCode) +
     (assetCount.hashCode) +
+    (collectionId == null ? 0 : collectionId!.hashCode) +
     (contributorCounts.hashCode) +
     (createdAt.hashCode) +
     (description.hashCode) +
@@ -144,7 +150,7 @@ class AlbumResponseDto {
     (updatedAt.hashCode);
 
   @override
-  String toString() => 'AlbumResponseDto[albumName=$albumName, albumThumbnailAssetId=$albumThumbnailAssetId, albumUsers=$albumUsers, assetCount=$assetCount, contributorCounts=$contributorCounts, createdAt=$createdAt, description=$description, endDate=$endDate, hasSharedLink=$hasSharedLink, id=$id, isActivityEnabled=$isActivityEnabled, lastModifiedAssetTimestamp=$lastModifiedAssetTimestamp, order=$order, shared=$shared, startDate=$startDate, updatedAt=$updatedAt]';
+  String toString() => 'AlbumResponseDto[albumName=$albumName, albumThumbnailAssetId=$albumThumbnailAssetId, albumUsers=$albumUsers, assetCount=$assetCount, collectionId=$collectionId, contributorCounts=$contributorCounts, createdAt=$createdAt, description=$description, endDate=$endDate, hasSharedLink=$hasSharedLink, id=$id, isActivityEnabled=$isActivityEnabled, lastModifiedAssetTimestamp=$lastModifiedAssetTimestamp, order=$order, shared=$shared, startDate=$startDate, updatedAt=$updatedAt]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -156,6 +162,11 @@ class AlbumResponseDto {
     }
       json[r'albumUsers'] = this.albumUsers;
       json[r'assetCount'] = this.assetCount;
+    if (this.collectionId != null) {
+      json[r'collectionId'] = this.collectionId;
+    } else {
+      json[r'collectionId'] = null;
+    }
     if (this.contributorCounts.isPresent) {
       final value = this.contributorCounts.value;
       json[r'contributorCounts'] = value;
@@ -199,6 +210,7 @@ class AlbumResponseDto {
         albumThumbnailAssetId: mapValueOfType<String>(json, r'albumThumbnailAssetId'),
         albumUsers: AlbumUserResponseDto.listFromJson(json[r'albumUsers']),
         assetCount: mapValueOfType<int>(json, r'assetCount')!,
+        collectionId: mapValueOfType<String>(json, r'collectionId'),
         contributorCounts: json.containsKey(r'contributorCounts') ? Optional.present(ContributorCountResponseDto.listFromJson(json[r'contributorCounts'])) : const Optional.absent(),
         createdAt: mapDateTime(json, r'createdAt', r'')!,
         description: mapValueOfType<String>(json, r'description')!,
@@ -262,6 +274,7 @@ class AlbumResponseDto {
     'albumThumbnailAssetId',
     'albumUsers',
     'assetCount',
+    'collectionId',
     'createdAt',
     'description',
     'hasSharedLink',

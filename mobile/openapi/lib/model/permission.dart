@@ -58,6 +58,10 @@ class Permission {
   static const albumUserPeriodCreate = Permission._(r'albumUser.create');
   static const albumUserPeriodUpdate = Permission._(r'albumUser.update');
   static const albumUserPeriodDelete = Permission._(r'albumUser.delete');
+  static const collectionPeriodCreate = Permission._(r'collection.create');
+  static const collectionPeriodRead = Permission._(r'collection.read');
+  static const collectionPeriodUpdate = Permission._(r'collection.update');
+  static const collectionPeriodDelete = Permission._(r'collection.delete');
   static const authPeriodChangePassword = Permission._(r'auth.changePassword');
   static const authDevicePeriodDelete = Permission._(r'authDevice.delete');
   static const archivePeriodRead = Permission._(r'archive.read');
@@ -216,6 +220,10 @@ class Permission {
     albumUserPeriodCreate,
     albumUserPeriodUpdate,
     albumUserPeriodDelete,
+    collectionPeriodCreate,
+    collectionPeriodRead,
+    collectionPeriodUpdate,
+    collectionPeriodDelete,
     authPeriodChangePassword,
     authDevicePeriodDelete,
     archivePeriodRead,
@@ -409,6 +417,10 @@ class PermissionTypeTransformer {
         case r'albumUser.create': return Permission.albumUserPeriodCreate;
         case r'albumUser.update': return Permission.albumUserPeriodUpdate;
         case r'albumUser.delete': return Permission.albumUserPeriodDelete;
+        case r'collection.create': return Permission.collectionPeriodCreate;
+        case r'collection.read': return Permission.collectionPeriodRead;
+        case r'collection.update': return Permission.collectionPeriodUpdate;
+        case r'collection.delete': return Permission.collectionPeriodDelete;
         case r'auth.changePassword': return Permission.authPeriodChangePassword;
         case r'authDevice.delete': return Permission.authDevicePeriodDelete;
         case r'archive.read': return Permission.archivePeriodRead;

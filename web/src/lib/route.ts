@@ -66,6 +66,10 @@ export const Route = {
   // buy
   buy: () => '/buy',
 
+  // collections
+  collections: () => '/collections',
+  viewCollection: ({ id }: { id: string }) => `/collections/${id}`,
+
   // explore
   explore: () => '/explore',
   places: () => '/places',
